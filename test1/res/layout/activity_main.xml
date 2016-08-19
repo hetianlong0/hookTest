@@ -1,0 +1,77 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    tools:context=".MainActivity" >
+
+ 
+    <TextView
+        android:id = "@+id/tv_1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/hello_world" />
+
+    <Button
+        android:id="@+id/Button01"
+        android:layout_below="@id/tv_1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:height="30dp"
+        android:visibility="gone" />
+    
+     <Button
+        android:id="@+id/Button02"
+        android:layout_below="@id/Button01"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:height="30px"
+        android:text="程序奔溃" />
+     
+      <Button
+        android:id="@+id/Button03"
+        android:layout_below="@id/Button02"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:height="30px"
+        android:text="发送设备命令" />
+      
+       <Button
+        android:id="@+id/Button04"
+        android:layout_below="@id/Button03"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:height="30px"
+        android:visibility="visible"
+        android:text="获得网络信息" />
+       
+        <Button
+        android:id="@+id/Button05"
+        android:layout_below="@id/Button04"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:height="30px"
+        android:visibility="visible"
+        android:text="hook 并发送网络命令" />
+        
+        
+        <Button
+        android:id="@+id/Button06"
+        android:layout_below="@id/Button05"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:height="30px"
+        android:visibility="visible"
+        android:text="提交hook了的网络参数" />
+   
+
+</RelativeLayout>
