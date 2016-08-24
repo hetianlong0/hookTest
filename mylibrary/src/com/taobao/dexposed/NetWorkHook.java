@@ -1,5 +1,7 @@
 package com.taobao.dexposed;
 
+import java.io.InputStream;
+import java.net.HttpURLConnection;
 import java.net.URL;
 
 import org.apache.http.HttpHost;
@@ -32,6 +34,7 @@ public class NetWorkHook {
 	public String executeUrl;
 
 	public String executeMethod;
+	public String connectionMethod;
 
 	// http请求的返回值
 	// 200请求成功; 303重定向; 400请求错误; 401未授权; 403禁止访问; 404文件未找到; 500服务器错误
@@ -145,23 +148,14 @@ public class NetWorkHook {
 		}
 
 		XC_MethodHook mehodHookConnection = new XC_MethodHook() {
-			@Override
-			protected void afterHookedMethod(MethodHookParam param)
-					throws Throwable {
-				connectionStartTime = System.currentTimeMillis();
-				URL url = (URL) param.thisObject;
-				Log.d(TAG, "Connect to URL, the URL = " + url.toString()
-						+ "connection start time = " + connectionStartTime);
-			}
 
 			protected void beforeHookedMethod(MethodHookParam param)
 					throws Throwable {
-				connectionEndTime = System.currentTimeMillis();
+				connectionStartTime = System.currentTimeMillis();
 				URL url = (URL) param.thisObject;
+				connectionUrl = url.toString();
 				Log.d(TAG, "Connect to URL, the URL = " + url.toString()
-						+ "connection end time = " + connectionEndTime);
-				Log.d(TAG, "connection time is = "
-						+ (connectionEndTime - connectionStartTime));
+						+ "connection end time = " + connectionStartTime);
 			}
 		};
 
@@ -176,10 +170,162 @@ public class NetWorkHook {
 			onConnection = null;
 		}
 	}
+	
+	private void hookGetRetCode() {
+		Class<?> cls = null;
+		try {
+			cls = Class.forName("com.android.okhttp.internal.http.HttpURLConnectionImpl");
+		} catch (ClassNotFoundException e) {
+			Log.w(TAG, "fail to find class java.net.URL");
+			e.printStackTrace();
+			return;
+		}
+
+		XC_MethodHook mehodHookConnection = new XC_MethodHook() {
+			@Override
+			protected void afterHookedMethod(MethodHookParam param)
+					throws Throwable {
+				HttpURLConnection urlConnection = (HttpURLConnection) param.thisObject;
+				if(urlConnection == null) {
+					return;
+				}
+				
+				String url = urlConnection.getURL().toString();
+				if(!url.equals(connectionUrl)) {	//与openConnection的URL一致，那么证明hook的有问题
+					return; 
+				}
+				
+				connectionEndTime = System.currentTimeMillis();
+				connectionMethod = urlConnection.getRequestMethod();
+				
+				Object retObj = param.getResult();
+				if(retObj != null) {
+					urlRetCode = (Integer)(param.getResult());
+				}
+				
+				Log.d(TAG, "Connect to URL, the URL = " + url
+						+ "connection start time = " + connectionStartTime
+						+ " end time = " + connectionEndTime);
+			}
+		};
+
+		onGetRetCode = DexposedBridge.findAndHookMethod(cls, "getResponseCode",
+				mehodHookConnection);
+	}
+	
+	private void unhookGetRetCode() {
+
+		if (onGetRetCode != null) {
+			onGetRetCode.unhook();
+			onGetRetCode = null;
+		}
+	}
+	
+	private void hookInputStream() {
+		Class<?> cls = null;
+		try {
+			cls = Class.forName("com.android.okhttp.internal.http.HttpURLConnectionImpl");
+		} catch (ClassNotFoundException e) {
+			Log.w(TAG, "fail to find class java.net.URL");
+			e.printStackTrace();
+			return;
+		}
+
+		XC_MethodHook mehodHookConnection = new XC_MethodHook() {
+			@Override
+			protected void afterHookedMethod(MethodHookParam param)
+					throws Throwable {
+				HttpURLConnection urlConnection = (HttpURLConnection) param.thisObject;
+				if(urlConnection == null) {
+					return;
+				}
+				
+				String url = urlConnection.getURL().toString();
+				if(!url.equals(connectionUrl)) {	//与openConnection的URL一致，那么证明hook的有问题
+					return; 
+				}
+				
+				connectionEndTime = System.currentTimeMillis();
+				connectionMethod = urlConnection.getRequestMethod();
+				
+				int retCode = urlConnection.getResponseCode();
+				urlRetCode = retCode;
+				
+				Log.d(TAG, "Connect to URL, the URL = " + url
+						+ "connection start time = " + connectionStartTime
+						+ " end time = " + connectionEndTime + " ret code = " + retCode);
+			}
+		};
+
+		onGetInputStream = DexposedBridge.findAndHookMethod(cls, "getInputStream",
+				mehodHookConnection);
+	}
+	
+	private void unhookInputStream() {
+
+		if (onGetInputStream != null) {
+			onGetInputStream.unhook();
+			onGetInputStream = null;
+		}
+	}
+	
+	private void hookConnect() {
+
+		Class<?> cls = null;
+		try {
+			cls = Class.forName("com.android.okhttp.internal.http.HttpURLConnectionImpl");
+		} catch (ClassNotFoundException e) {
+			Log.w(TAG, "fail to find class com.android.okhttp.internal.http.HttpURLConnectionImpl");
+			e.printStackTrace();
+			return;
+		}
+
+		XC_MethodHook mehodHookConnection = new XC_MethodHook() {
+
+			protected void beforeHookedMethod(MethodHookParam param)
+					throws Throwable {
+				connectionStartTime = System.currentTimeMillis();
+				HttpURLConnection urlConnection = (HttpURLConnection) param.thisObject;
+				if(urlConnection == null) {
+					return;
+				}
+				
+				String url = urlConnection.getURL().toString();
+				if(!url.equals(connectionUrl)) {	//与openConnection的URL一致，那么证明hook的有问题
+					return; 
+				}
+				
+				String strMethod = urlConnection.getRequestMethod();
+				connectionMethod = strMethod;
+				
+				
+				Log.d(TAG, "Connect to URL, the URL = " + url
+						+ "connection start time = " + connectionStartTime);
+			}
+		};
+
+		onConnect = DexposedBridge.findAndHookMethod(cls, "connect",
+				mehodHookConnection);
+	}
+
+	private void unhookConnect() {
+
+		if (onConnect != null) {
+			onConnect.unhook();
+			onConnect = null;
+		}
+	}
+	
 
 	private static final String TAG = "Lag";
 	private Unhook onExecute;
 	private Unhook onConnection;
+	private Unhook onGetRetCode;
+	private Unhook onGetInputStream;
+	
+	private Unhook onConnect;
+	
+	
 	private boolean isStart = false;
 
 	public void start() {
@@ -189,7 +335,10 @@ public class NetWorkHook {
 		if (isStart)
 			return;
 
+		hookConnect();
+		hookInputStream();
 		hookConnection();
+//		hookGetRetCode();
 		hook();
 
 		isStart = true;
@@ -202,8 +351,11 @@ public class NetWorkHook {
 		if (!isStart)
 			return;
 
+//		unhookGetRetCode();
+		unhookConnect();
 		unhookConnection();
 		unhook();
+		unhookInputStream();
 
 		isStart = false;
 	}

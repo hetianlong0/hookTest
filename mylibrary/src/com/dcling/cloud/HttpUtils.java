@@ -122,14 +122,14 @@ public class HttpUtils {
 
 	public static StringBuffer getRequestData(Map<String, String> params,
 			String encode) {
-		StringBuffer stringBuffer = new StringBuffer(); // �洢��װ�õ���������Ϣ
+		StringBuffer stringBuffer = new StringBuffer();
 		try {
 			for (Map.Entry<String, String> entry : params.entrySet()) {
 				stringBuffer.append(entry.getKey()).append("=")
 						.append(URLEncoder.encode(entry.getValue(), encode))
 						.append("&");
 			}
-			stringBuffer.deleteCharAt(stringBuffer.length() - 1); // ɾ������һ��"&"
+			stringBuffer.deleteCharAt(stringBuffer.length() - 1);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

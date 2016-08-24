@@ -13,7 +13,7 @@ import android.content.pm.PackageManager.NameNotFoundException;
 
 public class DclingCloudAgent {
 
-	private static DclingCloudAgent sLingAgent;
+	private volatile static DclingCloudAgent sLingAgent;
 
 	private boolean isEnabled;
 
@@ -79,7 +79,8 @@ public class DclingCloudAgent {
 		}
 		return sLingAgent;
 	}
-
+	
+	
 	public void setCrashEnabled(boolean enabled) {
 		isEnabled = enabled;
 	}
@@ -106,7 +107,7 @@ public class DclingCloudAgent {
 	}
 
 	public void sendHookHttpCommand() {
-		NetWorkHook.instance().stop();
+//		NetWorkHook.instance().stop();
 		new Thread() {
 			@Override
 			public void run() {
