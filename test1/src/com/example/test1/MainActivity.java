@@ -16,13 +16,17 @@ import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.util.EntityUtils;
 
 import com.dcling.cloud.DclingCloudAgent;
+import com.dcling.cloud.countly2.Countly;
 import com.taobao.dexposed.NetWorkHook;
 
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.annotation.SuppressLint;
+import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.Context;
 import android.telephony.TelephonyManager;
@@ -30,9 +34,13 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.View;
 import android.view.View.OnClickListener;
+
+import android.view.Choreographer;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
+
+
 
 public class MainActivity extends Activity {
 
@@ -66,6 +74,8 @@ public class MainActivity extends Activity {
 		 }
 	}
 	
+	NutFrameCallback nutFrameCallback = new NutFrameCallback();
+	
 	//新建Handler的对象，在这里接收Message，然后更新TextView控件的内容
     private Handler handler = new Handler() {
 
@@ -87,98 +97,107 @@ public class MainActivity extends Activity {
 	
 	
 	
-	public static String GetNetworkType(Context context) {
-		String strNetworkType = "";
-		ConnectivityManager manager = (ConnectivityManager) context
-				.getSystemService(Context.CONNECTIVITY_SERVICE);
-		try {
-			NetworkInfo networkInfo = manager.getActiveNetworkInfo();
-			if (networkInfo != null && networkInfo.isConnected()) {
-				
-				String ip = getPhoneIp();
-				
-				if (networkInfo.getType() == ConnectivityManager.TYPE_WIFI) {
-					strNetworkType = "WIFI";
-				} else if (networkInfo.getType() == ConnectivityManager.TYPE_MOBILE) {
-					String _strSubTypeName = networkInfo.getSubtypeName();
-
-					Log.v(TAG, "Network getSubtypeName : " + _strSubTypeName);
-
-					// TD-SCDMA networkType is 17
-					int networkType = networkInfo.getSubtype();
-					switch (networkType) {
-					case TelephonyManager.NETWORK_TYPE_GPRS:
-					case TelephonyManager.NETWORK_TYPE_EDGE:
-					case TelephonyManager.NETWORK_TYPE_CDMA:
-					case TelephonyManager.NETWORK_TYPE_1xRTT:
-					case TelephonyManager.NETWORK_TYPE_IDEN: // api<8 : replace by 11
-						strNetworkType = "2G";
-						break;
-					case TelephonyManager.NETWORK_TYPE_UMTS:
-					case TelephonyManager.NETWORK_TYPE_EVDO_0:
-					case TelephonyManager.NETWORK_TYPE_EVDO_A:
-					case TelephonyManager.NETWORK_TYPE_HSDPA:
-					case TelephonyManager.NETWORK_TYPE_HSUPA:
-					case TelephonyManager.NETWORK_TYPE_HSPA:
-					case TelephonyManager.NETWORK_TYPE_EVDO_B: // api<9 replace by 14
-					case TelephonyManager.NETWORK_TYPE_EHRPD:  // api<11 replace by 12
-					case TelephonyManager.NETWORK_TYPE_HSPAP:  // api<13 replace by 15
-						strNetworkType = "3G";
-						break;
-					case TelephonyManager.NETWORK_TYPE_LTE:  // api<11 replace by 13
-						strNetworkType = "4G";
-						break;
-					default:
-						if (_strSubTypeName.equalsIgnoreCase("TD-SCDMA")
-								|| _strSubTypeName.equalsIgnoreCase("WCDMA")
-								|| _strSubTypeName.equalsIgnoreCase("CDMA2000")) {
-							strNetworkType = "3G";
-						} else {
-							strNetworkType = _strSubTypeName;
-						}
-						break;
-					}
-					Log.v(TAG,
-							"Network getSubtype : "
-									+ Integer.valueOf(networkType).toString());
-				}
-			}
-		} catch (Exception e) {
-		}
-
-		Log.v(TAG, "Network Type : " + strNetworkType);
-
-		return strNetworkType;
-	}
+//	public static String GetNetworkType(Context context) {
+//		String strNetworkType = "";
+//		ConnectivityManager manager = (ConnectivityManager) context
+//				.getSystemService(Context.CONNECTIVITY_SERVICE);
+//		try {
+//			NetworkInfo networkInfo = manager.getActiveNetworkInfo();
+//			if (networkInfo != null && networkInfo.isConnected()) {
+//				
+//				String ip = getPhoneIp();
+//				
+//				if (networkInfo.getType() == ConnectivityManager.TYPE_WIFI) {
+//					strNetworkType = "WIFI";
+//				} else if (networkInfo.getType() == ConnectivityManager.TYPE_MOBILE) {
+//					String _strSubTypeName = networkInfo.getSubtypeName();
+//
+//					Log.v(TAG, "Network getSubtypeName : " + _strSubTypeName);
+//
+//					// TD-SCDMA networkType is 17
+//					int networkType = networkInfo.getSubtype();
+//					switch (networkType) {
+//					case TelephonyManager.NETWORK_TYPE_GPRS:
+//					case TelephonyManager.NETWORK_TYPE_EDGE:
+//					case TelephonyManager.NETWORK_TYPE_CDMA:
+//					case TelephonyManager.NETWORK_TYPE_1xRTT:
+//					case TelephonyManager.NETWORK_TYPE_IDEN: // api<8 : replace by 11
+//						strNetworkType = "2G";
+//						break;
+//					case TelephonyManager.NETWORK_TYPE_UMTS:
+//					case TelephonyManager.NETWORK_TYPE_EVDO_0:
+//					case TelephonyManager.NETWORK_TYPE_EVDO_A:
+//					case TelephonyManager.NETWORK_TYPE_HSDPA:
+//					case TelephonyManager.NETWORK_TYPE_HSUPA:
+//					case TelephonyManager.NETWORK_TYPE_HSPA:
+//					case TelephonyManager.NETWORK_TYPE_EVDO_B: // api<9 replace by 14
+//					case TelephonyManager.NETWORK_TYPE_EHRPD:  // api<11 replace by 12
+//					case TelephonyManager.NETWORK_TYPE_HSPAP:  // api<13 replace by 15
+//						strNetworkType = "3G";
+//						break;
+//					case TelephonyManager.NETWORK_TYPE_LTE:  // api<11 replace by 13
+//						strNetworkType = "4G";
+//						break;
+//					default:
+//						if (_strSubTypeName.equalsIgnoreCase("TD-SCDMA")
+//								|| _strSubTypeName.equalsIgnoreCase("WCDMA")
+//								|| _strSubTypeName.equalsIgnoreCase("CDMA2000")) {
+//							strNetworkType = "3G";
+//						} else {
+//							strNetworkType = _strSubTypeName;
+//						}
+//						break;
+//					}
+//					Log.v(TAG,
+//							"Network getSubtype : "
+//									+ Integer.valueOf(networkType).toString());
+//				}
+//			}
+//		} catch (Exception e) {
+//		}
+//
+//		Log.v(TAG, "Network Type : " + strNetworkType);
+//
+//		return strNetworkType;
+//	}
 	
-	/**
-	 * 获得本机IP地址
-	 * @return
-	 */
-	public static String getPhoneIp() {
-		try {
-			for (Enumeration<NetworkInterface> en = NetworkInterface.getNetworkInterfaces(); en.hasMoreElements();) {
-				NetworkInterface intf = en.nextElement();
-				for (Enumeration<InetAddress> enumIpAddr = intf.getInetAddresses(); enumIpAddr.hasMoreElements();) {
-					InetAddress inetAddress = enumIpAddr.nextElement();
-					if (!inetAddress.isLoopbackAddress() && inetAddress instanceof Inet4Address) {
-						return inetAddress.getHostAddress().toString();
-					}
-				}
-			}
-		} catch (Exception e) {
-		}
-		return "";
-	}
+//	/**
+//	 * 获得本机IP地址
+//	 * @return
+//	 */
+//	public static String getPhoneIp() {
+//		try {
+//			for (Enumeration<NetworkInterface> en = NetworkInterface.getNetworkInterfaces(); en.hasMoreElements();) {
+//				NetworkInterface intf = en.nextElement();
+//				for (Enumeration<InetAddress> enumIpAddr = intf.getInetAddresses(); enumIpAddr.hasMoreElements();) {
+//					InetAddress inetAddress = enumIpAddr.nextElement();
+//					if (!inetAddress.isLoopbackAddress() && inetAddress instanceof Inet4Address) {
+//						return inetAddress.getHostAddress().toString();
+//					}
+//				}
+//			}
+//		} catch (Exception e) {
+//		}
+//		return "";
+//	}
 	
 	
+	@TargetApi(Build.VERSION_CODES.JELLY_BEAN)
+	@SuppressLint("NewApi")
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 		
+		Choreographer.getInstance().postFrameCallback(nutFrameCallback);
+		 
 		lingAgent = DclingCloudAgent.getInstace(this);
 		lingAgent.setCrashEnabled(true);
+		String url = "http://192.168.1.48";
+		String app_key = "a2bfbd3be423f5e7eeed8bbe3f71fa79c95680cc";
+		lingAgent.initUploadServices(url, app_key);
+		
+		Countly.onCreate(this);
 		
 		tv_1 = (TextView)findViewById(R.id.tv_1);
 		btCreateData = (Button) findViewById(R.id.Button01);
@@ -194,7 +213,7 @@ public class MainActivity extends Activity {
 		btSendHookCommand = (Button)findViewById(R.id.Button06);
 		btSendHookCommand.setOnClickListener(new ClickViewHandler());
 		
-		GetNetworkType(this.getBaseContext());
+//		GetNetworkType(this.getBaseContext());
 		
 		float cpuDo = getProcessCpuRate();
 		long time = getTotalCpuTime();
@@ -210,6 +229,21 @@ public class MainActivity extends Activity {
 	
 	private class ClickViewHandler implements OnClickListener {
 		
+		private void DelAllPeople() {
+			Log.d(TAG, "ret = ");
+		}
+
+		private void DelOne() {
+			
+		}
+
+		private void ViewRecords() {
+
+		}
+		private void InsertSomeRecords() {
+			
+		}
+
 		@Override
 		public void onClick(View v) {
 			if (v == btInsertData) {
@@ -226,21 +260,6 @@ public class MainActivity extends Activity {
 				lingAgent.hookNetWorkEnable(true);
 				lingAgent.sendHookHttpCommand();
 			}
-		}
-
-		private void DelAllPeople() {
-			Log.d(TAG, "ret = ");
-		}
-
-		private void DelOne() {
-			
-		}
-
-		private void ViewRecords() {
-
-		}
-		private void InsertSomeRecords() {
-			
 		}
 	}
 
@@ -336,4 +355,39 @@ public class MainActivity extends Activity {
 	            }
 	        }).start();//这个start()方法不要忘记了           
 	}
+    
+    @SuppressLint("NewApi")
+	private static  class NutFrameCallback implements Choreographer.FrameCallback {
+
+        static final NutFrameCallback callback = new NutFrameCallback();
+        private long mLastFrameTimeNanos = 0;
+        private long mFrameIntervalNanos = (long)(500000000) - 1;
+        @Override
+        public void doFrame(long frameTimeNanos) {
+            if (mLastFrameTimeNanos != 0) {
+                final long jitterNanos = frameTimeNanos - mLastFrameTimeNanos;
+                if (jitterNanos > mFrameIntervalNanos) {
+                  int a = 0;
+                  a++;
+                }
+            }
+            mLastFrameTimeNanos = frameTimeNanos;
+
+            Choreographer.getInstance().postFrameCallback(NutFrameCallback.callback);
+        }
+    }
+    
+    @Override
+    public void onStart()
+    {
+        super.onStart();
+        Countly.sharedInstance().onStart(this);
+    }
+
+    @Override
+    public void onStop()
+    {
+        Countly.sharedInstance().onStop();
+        super.onStop();
+    }
 }

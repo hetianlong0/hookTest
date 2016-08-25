@@ -1,9 +1,11 @@
 package com.dcling.cloud;
 
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 
 import org.json.JSONObject;
 
+import com.dcling.cloud.countly2.Countly;
 import com.taobao.dexposed.NetWorkHook;
 
 import android.content.Context;
@@ -171,4 +173,67 @@ public class DclingCloudAgent {
 			NetWorkHook.instance().stop();
 		}
 	}
+	
+	public void initUploadServices(String Url, String appKey) {
+		 Countly.sharedInstance().setLoggingEnabled(true);
+//		 Countly.sharedInstance()
+//           .init(mContext, "http://192.168.1.48", "a2bfbd3be423f5e7eeed8bbe3f71fa79c95680cc");
+		 
+//		 Countly.sharedInstance().init(mContext, Url, appKey);
+		 Countly.sharedInstance().init(mContext, Url, appKey, Utils.getDeviceHashId(mContext));
+		 
+		 setUserData();
+		 enableCrashTracking();
+		 Countly.sharedInstance().recordEvent("test", 1);
+	}
+	
+	public void enableCrashTracking(){
+        //add some custom segments, like dependency library versions
+        HashMap<String, String> data = new HashMap<String, String>();
+        data.put("Facebook", "3.5");
+        data.put("Admob", "6.5");
+        Countly.sharedInstance().setCustomCrashSegments(data);
+        Countly.sharedInstance().enableCrashReporting();
+        
+        Countly.sharedInstance().setLocation(44.5888300, 33.5224000);
+    }
+	
+	public void setUserData(){
+        HashMap<String, String> data = new HashMap<String, String>();
+        data.put("name", "Firstname Lastname");
+        data.put("username", "nickname");
+        data.put("email", "test@test.com");
+        data.put("organization", "Tester");
+        data.put("phone", "+123456789");
+        data.put("gender", "M");
+        //provide url to picture
+        //data.put("picture", "http://example.com/pictures/profile_pic.png");
+        //or locally from device
+        //data.put("picturePath", "/mnt/sdcard/portrait.jpg");
+        data.put("byear", "1987");
+
+        //providing any custom key values to store with user
+        HashMap<String, String> custom = new HashMap<String, String>();
+        custom.put("country", "Turkey");
+        custom.put("city", "Istanbul");
+        custom.put("address", "My house 11");
+
+        //set multiple custom properties
+        Countly.userData.setUserData(data, custom);
+
+        //set custom properties by one
+        Countly.userData.setProperty("test", "test");
+
+        //increment used value by 1
+        Countly.userData.incrementBy("used", 1);
+
+        //insert value to array of unique values
+        Countly.userData.pushUniqueValue("type", "morning");
+
+        //insert multiple values to same property
+        Countly.userData.pushUniqueValue("skill", "fire");
+        Countly.userData.pushUniqueValue("skill", "earth");
+
+        Countly.userData.save();
+    }
 }
