@@ -150,7 +150,7 @@ public class HttpSendThread {
 						"success");
 				 if (!success && DclingCloudAgent.isLoggingEnabled()) {
 				 Log.w(DclingCloudAgent.TAG,
-				 "Response from Countly server did not report success, it was: "
+				 "Response from lingcloud server did not report success, it was: "
 				 + responseData.toString("UTF-8"));
 				 }
 			}

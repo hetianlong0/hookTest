@@ -15,7 +15,7 @@ import java.util.List;
 import java.util.Map;
 
 public class lingAgentStore {
-    private static final String PREFERENCES = "COUNTLY_STORE";
+    private static final String PREFERENCES = "LINGCLOUD_STORE";
     private static final String DELIMITER = ":::";
     private static final String CONNECTIONS_PREFERENCE = "CONNECTIONS";
     private static final String EVENTS_PREFERENCE = "EVENTS";

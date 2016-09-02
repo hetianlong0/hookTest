@@ -101,7 +101,7 @@ public class ConnectionQueue {
      * Records a session start event for the app and sends it to the server.
      * @throws IllegalStateException if context, app key, store, or server URL have not been set
      */
-    void beginSession() {
+    public void beginSession() {
         checkInternalState();
         final String data = "app_key=" + appKey_
                           + "&timestamp=" + Utils.currentTimestamp()
@@ -123,19 +123,19 @@ public class ConnectionQueue {
      * @throws IllegalStateException if context, app key, store, or server URL have not been set
      */
     public void updateSession(final int duration) {
-//        checkInternalState();
-//        if (duration > 0) {
-//            final String data = "app_key=" + appKey_
-//                              + "&timestamp=" + MainBridge.currentTimestamp()
-//                              + "&hour=" + MainBridge.currentHour()
-//                              + "&dow=" + MainBridge.currentDayOfWeek()
-//                              + "&session_duration=" + duration
-//                              + "&location=" + this.getLingAgentStore().getAndRemoveLocation();
-//
-//            store_.addConnection(data);
-//
-//            tick();
-//        }
+        checkInternalState();
+        if (duration > 0) {
+            final String data = "app_key=" + appKey_
+                              + "&timestamp=" + Utils.currentTimestamp()
+                              + "&hour=" + Utils.currentHour()
+                              + "&dow=" + Utils.currentDayOfWeek()
+                              + "&session_duration=" + duration
+                              + "&location=" + this.getLingAgentStore().getAndRemoveLocation();
+
+            store_.addConnection(data);
+
+            tick();
+        }
     }
 
 //    public void tokenSession(String token, MainBridge.CountlyMessagingMode mode) {
@@ -167,44 +167,44 @@ public class ConnectionQueue {
      * @param duration duration in seconds to extend the current app session
      * @throws IllegalStateException if context, app key, store, or server URL have not been set
      */
-    void endSession(final int duration) {
-//        checkInternalState();
-//        String data = "app_key=" + appKey_
-//                    + "&timestamp=" + MainBridge.currentTimestamp()
-//                    + "&hour=" + MainBridge.currentHour()
-//                    + "&dow=" + MainBridge.currentDayOfWeek()
-//                    + "&end_session=1";
-//        if (duration > 0) {
-//            data += "&session_duration=" + duration;
-//        }
-//
-//        store_.addConnection(data);
-//
-//        tick();
+    public void endSession(final int duration) {
+        checkInternalState();
+        String data = "app_key=" + appKey_
+                    + "&timestamp=" + Utils.currentTimestamp()
+                    + "&hour=" + Utils.currentHour()
+                    + "&dow=" + Utils.currentDayOfWeek()
+                    + "&end_session=1";
+        if (duration > 0) {
+            data += "&session_duration=" + duration;
+        }
+
+        store_.addConnection(data);
+
+        tick();
     }
 
     /**
      * Send user data to the server.
      * @throws java.lang.IllegalStateException if context, app key, store, or server URL have not been set
      */
-    void sendUserData() {
+    public void sendUserData() {
         checkInternalState();
-//        String userdata = UserData.getDataForRequest();
-//
-//        if(!userdata.equals("")){
-//            String data = "app_key=" + appKey_
-//                    + "&timestamp=" + MainBridge.currentTimestamp()
-//                    + "&hour=" + MainBridge.currentHour()
-//                    + "&dow=" + MainBridge.currentDayOfWeek()
-//                    + userdata;
-//            store_.addConnection(data);
-//
-//            tick();
-//        }
+        String userdata = UserData.getDataForRequest();
+
+        if(!userdata.equals("")){
+            String data = "app_key=" + appKey_
+                    + "&timestamp=" + Utils.currentTimestamp()
+                    + "&hour=" + Utils.currentHour()
+                    + "&dow=" + Utils.currentDayOfWeek()
+                    + userdata;
+            store_.addConnection(data);
+
+            tick();
+        }
     }
 
     /**
-     * Attribute installation to Countly server.
+     * Attribute installation to lingcloud server.
      * @param referrer query parameters
      * @throws java.lang.IllegalStateException if context, app key, store, or server URL have not been set
      */
@@ -227,18 +227,18 @@ public class ConnectionQueue {
      * Reports a crash with device data to the server.
      * @throws IllegalStateException if context, app key, store, or server URL have not been set
      */
-    void sendCrashReport(String error, boolean nonfatal) {
-//        checkInternalState();
-//        final String data = "app_key=" + appKey_
-//                + "&timestamp=" + MainBridge.currentTimestamp()
-//                + "&hour=" + MainBridge.currentHour()
-//                + "&dow=" + MainBridge.currentDayOfWeek()
-//                + "&sdk_version=" + MainBridge.COUNTLY_SDK_VERSION_STRING
-//                + "&crash=" + CrashDetails.getCrashData(context_, error, nonfatal);
-//
-//        store_.addConnection(data);
-//
-//        tick();
+    public void sendCrashReport(String error, boolean nonfatal) {
+        checkInternalState();
+        final String data = "app_key=" + appKey_
+                + "&timestamp=" + Utils.currentTimestamp()
+                + "&hour=" + Utils.currentHour()
+                + "&dow=" + Utils.currentDayOfWeek()
+                + "&sdk_version=" + DclingCloudAgent.LINGCLOUD_APPTRACE_SDK_VERSION_STRING
+                + "&crash=" + CrashDetails.getCrashData(context_, error, nonfatal);
+
+        store_.addConnection(data);
+
+        tick();
     }
 
     /**
@@ -247,16 +247,16 @@ public class ConnectionQueue {
      * @throws IllegalStateException if context, app key, store, or server URL have not been set
      */
     public void recordEvents(final String events) {
-//        checkInternalState();
-//        final String data = "app_key=" + appKey_
-//                          + "&timestamp=" + MainBridge.currentTimestamp()
-//                          + "&hour=" + MainBridge.currentHour()
-//                          + "&dow=" + MainBridge.currentDayOfWeek()
-//                          + "&events=" + events;
-//
-//        store_.addConnection(data);
-//
-//        tick();
+        checkInternalState();
+        final String data = "app_key=" + appKey_
+                          + "&timestamp=" + Utils.currentTimestamp()
+                          + "&hour=" + Utils.currentHour()
+                          + "&dow=" + Utils.currentDayOfWeek()
+                          + "&events=" + events;
+
+        store_.addConnection(data);
+
+        tick();
     }
 
     /**
@@ -264,17 +264,17 @@ public class ConnectionQueue {
      * @param events URL-encoded JSON string of event data
      * @throws IllegalStateException if context, app key, store, or server URL have not been set
      */
-    void recordLocation(final String events) {
-//        checkInternalState();
-//        final String data = "app_key=" + appKey_
-//                          + "&timestamp=" + MainBridge.currentTimestamp()
-//                          + "&hour=" + MainBridge.currentHour()
-//                          + "&dow=" + MainBridge.currentDayOfWeek()
-//                          + "&events=" + events;
-//
-//        store_.addConnection(data);
-//
-//        tick();
+    public void recordLocation(final String events) {
+        checkInternalState();
+        final String data = "app_key=" + appKey_
+                          + "&timestamp=" + Utils.currentTimestamp()
+                          + "&hour=" + Utils.currentHour()
+                          + "&dow=" + Utils.currentDayOfWeek()
+                          + "&events=" + events;
+
+        store_.addConnection(data);
+
+        tick();
     }
 
     /**

@@ -16,6 +16,8 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import com.lingcloud.apptrace.sdk.store.CrashDetails;
+
 import android.annotation.TargetApi;
 import android.app.ActivityManager;
 import android.content.Context;
@@ -371,8 +373,8 @@ public class Utils {
             }
         }
         catch(Exception e){
-//            if (Countly.sharedInstance().isLoggingEnabled()) {
-//                Log.i(Countly.TAG, "Can't get batter level");
+//            if (DclingCloudAgent.isLoggingEnabled()) {
+//                Log.i(DclingCloudAgent.TAG, "Can't get batter level");
 //            }
         }
         return null;
@@ -382,8 +384,7 @@ public class Utils {
      * Get app's running time before crashing.
      */
     static String getRunningTime() {
-       // return Integer.toString(Countly.currentTimestamp() - startTime);
-    	return "";
+        return Integer.toString(Utils.currentTimestamp() - CrashDetails.getStartTime());
     }
 
     /**
@@ -432,8 +433,8 @@ public class Utils {
             return "false";
         }
         catch(Exception e){
-//            if (Countly.sharedInstance().isLoggingEnabled()) {
-//                Log.w(Countly.TAG, "Got exception determining connectivity", e);
+//            if (DclingCloudAgent.isLoggingEnabled()) {
+//                Log.w(DclingCloudAgent.TAG, "Got exception determining connectivity", e);
 //            }
         }
         return null;

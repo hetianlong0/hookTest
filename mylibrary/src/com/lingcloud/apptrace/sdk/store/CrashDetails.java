@@ -38,6 +38,10 @@ public class CrashDetails {
     private static boolean inBackground = true;
     private static long totalMemory = 0;
 
+    public static int getStartTime() {
+    	return startTime;
+    }
+    
     private static long getTotalRAM() {
         if(totalMemory == 0) {
             RandomAccessFile reader = null;

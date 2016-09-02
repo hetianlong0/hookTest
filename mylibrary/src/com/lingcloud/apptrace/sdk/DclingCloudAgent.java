@@ -83,7 +83,7 @@ public class DclingCloudAgent {
 
 	// 是否使能日志记录功能
 	private static boolean enableLogging_;
-	
+
 	// 线程队列，保存格式化后的字符串
 	static public TaskQueue taskQueue_ = TaskQueue.getInstance();
 
@@ -106,7 +106,7 @@ public class DclingCloudAgent {
 	private boolean autoViewTracker = true;
 
 	public static List<String> publicKeyPinCertificates;
-	
+
 	/**
 	 * Determines how many custom events can be queued locally before an attempt
 	 * is made to submit them to a Count.ly server.
@@ -165,19 +165,19 @@ public class DclingCloudAgent {
 			initConnectQueue(mContext, url, appKey,
 					Utils.getDeviceHashId(mContext));
 
-//			setUserData();
+			// setUserData();
 
 			// 设置后台服务器信息，URL, app_key
 			// initUploadServices(url, appKey);
 
-			// 启动发送线程，发送一些命令
-			HttpSendThread.start();
+			// 启动接收线程，接收一些命令
+		//	HttpSendThread.start();
 		}
 	}
 
-//	public void setCrashEnabled(boolean enabled) {
-//		isEnabled = enabled;
-//	}
+	// public void setCrashEnabled(boolean enabled) {
+	// isEnabled = enabled;
+	// }
 
 	public void sendDeviceInfo() {
 		new Thread() {
@@ -266,67 +266,67 @@ public class DclingCloudAgent {
 		}
 	}
 
-//	private void setLoggingEnabled(String Url, String appKey) {
-//		MainBridge.sharedInstance().setLoggingEnabled(true);
-//
-//		MainBridge.sharedInstance().init(mContext, Url, appKey,
-//				Utils.getDeviceHashId(mContext));
-//
-//		setUserData();
-//
-//		enableCrashTracking();
-//		MainBridge.sharedInstance().recordEvent("test", 1);
-//	}
+	// private void setLoggingEnabled(String Url, String appKey) {
+	// MainBridge.sharedInstance().setLoggingEnabled(true);
+	//
+	// MainBridge.sharedInstance().init(mContext, Url, appKey,
+	// Utils.getDeviceHashId(mContext));
+	//
+	// setUserData();
+	//
+	// enableCrashTracking();
+	// MainBridge.sharedInstance().recordEvent("test", 1);
+	// }
 
-//	public void enableCrashTracking() {
-//		// add some custom segments, like dependency library versions
-//		HashMap<String, String> data = new HashMap<String, String>();
-//		data.put("Facebook", "3.5");
-//		data.put("Admob", "6.5");
-//		MainBridge.sharedInstance().setCustomCrashSegments(data);
-//		MainBridge.sharedInstance().enableCrashReporting();
-//
-//		MainBridge.sharedInstance().setLocation(44.5888300, 33.5224000);
-//	}
+	// public void enableCrashTracking() {
+	// // add some custom segments, like dependency library versions
+	// HashMap<String, String> data = new HashMap<String, String>();
+	// data.put("Facebook", "3.5");
+	// data.put("Admob", "6.5");
+	// MainBridge.sharedInstance().setCustomCrashSegments(data);
+	// MainBridge.sharedInstance().enableCrashReporting();
+	//
+	// MainBridge.sharedInstance().setLocation(44.5888300, 33.5224000);
+	// }
 
-//	public void setUserData() {
-//		HashMap<String, String> data = new HashMap<String, String>();
-//		data.put("name", "Firstname Lastname");
-//		data.put("username", "nickname");
-//		data.put("email", "test@test.com");
-//		data.put("organization", "Tester");
-//		data.put("phone", "+123456789");
-//		data.put("gender", "M");
-//		// provide url to picture
-//		// data.put("picture", "http://example.com/pictures/profile_pic.png");
-//		// or locally from device
-//		// data.put("picturePath", "/mnt/sdcard/portrait.jpg");
-//		data.put("byear", "1987");
-//
-//		// providing any custom key values to store with user
-//		HashMap<String, String> custom = new HashMap<String, String>();
-//		custom.put("country", "Turkey");
-//		custom.put("city", "Istanbul");
-//		custom.put("address", "My house 11");
-//
-//		// set multiple custom properties
-//		userData.setUserData(data, custom);
-//
-//		// set custom properties by one
-//		userData.setProperty("test", "test");
-//
-//		// increment used value by 1
-//		userData.incrementBy("used", 1);
-//
-//		// insert value to array of unique values
-//		userData.pushUniqueValue("type", "morning");
-//
-//		// insert multiple values to same property
-//		userData.pushUniqueValue("skill", "fire");
-//		userData.pushUniqueValue("skill", "earth");
-//
-//		// userData.save();
-//	}
+	// public void setUserData() {
+	// HashMap<String, String> data = new HashMap<String, String>();
+	// data.put("name", "Firstname Lastname");
+	// data.put("username", "nickname");
+	// data.put("email", "test@test.com");
+	// data.put("organization", "Tester");
+	// data.put("phone", "+123456789");
+	// data.put("gender", "M");
+	// // provide url to picture
+	// // data.put("picture", "http://example.com/pictures/profile_pic.png");
+	// // or locally from device
+	// // data.put("picturePath", "/mnt/sdcard/portrait.jpg");
+	// data.put("byear", "1987");
+	//
+	// // providing any custom key values to store with user
+	// HashMap<String, String> custom = new HashMap<String, String>();
+	// custom.put("country", "Turkey");
+	// custom.put("city", "Istanbul");
+	// custom.put("address", "My house 11");
+	//
+	// // set multiple custom properties
+	// userData.setUserData(data, custom);
+	//
+	// // set custom properties by one
+	// userData.setProperty("test", "test");
+	//
+	// // increment used value by 1
+	// userData.incrementBy("used", 1);
+	//
+	// // insert value to array of unique values
+	// userData.pushUniqueValue("type", "morning");
+	//
+	// // insert multiple values to same property
+	// userData.pushUniqueValue("skill", "fire");
+	// userData.pushUniqueValue("skill", "earth");
+	//
+	// // userData.save();
+	// }
 
 	public synchronized void onStart(Activity activity) {
 		// appLaunchDeepLink = false;
@@ -362,13 +362,13 @@ public class DclingCloudAgent {
 	}
 
 	/**
-	 * Tells the Countly SDK that an Activity has stopped. Since Android does
+	 * Tells the lingcloud SDK that an Activity has stopped. Since Android does
 	 * not have an easy way to determine when an application instance starts and
 	 * stops, you must call this method from every one of your Activity's onStop
 	 * methods for accurate application session tracking.
 	 * 
 	 * @throws IllegalStateException
-	 *             if Countly SDK has not been initialized, or if unbalanced
+	 *             if lingcloud SDK has not been initialized, or if unbalanced
 	 *             calls to onStart/onStop are detected
 	 */
 	public synchronized void onStop() {
@@ -448,7 +448,7 @@ public class DclingCloudAgent {
 	 * session &amp; event data. This API is useful if your app has a tracking
 	 * opt-out switch, and you want to immediately disable tracking when a user
 	 * opts out. The onStart/onStop/recordEvent methods will throw
-	 * IllegalStateException after calling this until Countly is reinitialized
+	 * IllegalStateException after calling this until lingcloud is reinitialized
 	 * by calling init again.
 	 */
 	public synchronized void halt() {
@@ -523,11 +523,11 @@ public class DclingCloudAgent {
 		Intent launchIntent = activity.getPackageManager()
 				.getLaunchIntentForPackage(activity.getPackageName());
 
-		 if (isLoggingEnabled()) {
-		 Log.d(TAG, "Activity created: " +
-		 activity.getClass().getName() + " ( main is " +
-		 launchIntent.getComponent().getClassName() + ")");
-		 }
+		if (isLoggingEnabled()) {
+			Log.d(TAG, "Activity created: " + activity.getClass().getName()
+					+ " ( main is "
+					+ launchIntent.getComponent().getClassName() + ")");
+		}
 
 		Intent intent = activity.getIntent();
 		if (intent != null) {
@@ -546,11 +546,15 @@ public class DclingCloudAgent {
 	}
 
 	public synchronized void setLocation(double lat, double lon) {
-		connectionQueue_.getLingAgentStore().setLocation(lat, lon);
-		if (disableUpdateSessionRequests_) {
-			// connectionQueue_.updateSession(roundedSecondsSinceLastSessionDurationUpdate());
-			commandFactory_
-					.updateSession(roundedSecondsSinceLastSessionDurationUpdate());
+		try {
+			connectionQueue_.getLingAgentStore().setLocation(lat, lon);
+			if (disableUpdateSessionRequests_) {
+				// connectionQueue_.updateSession(roundedSecondsSinceLastSessionDurationUpdate());
+				commandFactory_
+						.updateSession(roundedSecondsSinceLastSessionDurationUpdate());
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
 	}
 
@@ -615,12 +619,11 @@ public class DclingCloudAgent {
 		recordEvent("[CLY]_view", segments, 1);
 		return;
 	}
-	
 
 	public void recordEvent(String key, int count, double sum) {
-        this.recordEvent(key, (Map)null, count, sum);
-    }
-	
+		this.recordEvent(key, (Map) null, count, sum);
+	}
+
 	public void recordEvent(final String key,
 			final Map<String, String> segmentation, final int count) {
 		recordEvent(key, segmentation, count, 0);
@@ -691,137 +694,137 @@ public class DclingCloudAgent {
 			commandFactory_.recordEvents(eventQueue_.events());
 		}
 	}
-	
-	 /**
-     * Sets information about user. Possible keys are:
-     * <ul>
-     * <li>
-     * name - (String) providing user's full name
-     * </li>
-     * <li>
-     * username - (String) providing user's nickname
-     * </li>
-     * <li>
-     * email - (String) providing user's email address
-     * </li>
-     * <li>
-     * organization - (String) providing user's organization's name where user works
-     * </li>
-     * <li>
-     * phone - (String) providing user's phone number
-     * </li>
-     * <li>
-     * picture - (String) providing WWW URL to user's avatar or profile picture
-     * </li>
-     * <li>
-     * picturePath - (String) providing local path to user's avatar or profile picture
-     * </li>
-     * <li>
-     * gender - (String) providing user's gender as M for male and F for female
-     * </li>
-     * <li>
-     * byear - (int) providing user's year of birth as integer
-     * </li>
-     * </ul>
-     * @param data Map&lt;String, String&gt; with user data
-     * @deprecated use {@link UserData#setUserData(Map)} to set data and {@link UserData#save()} to send it to server.
-     */
-    public synchronized void setUserData(Map<String, String> data) {
-        setUserData(data, null);
-    }
-    
-    /**
-     * Sets information about user with custom properties.
-     * In custom properties you can provide any string key values to be stored with user
-     * Possible keys are:
-     * <ul>
-     * <li>
-     * name - (String) providing user's full name
-     * </li>
-     * <li>
-     * username - (String) providing user's nickname
-     * </li>
-     * <li>
-     * email - (String) providing user's email address
-     * </li>
-     * <li>
-     * organization - (String) providing user's organization's name where user works
-     * </li>
-     * <li>
-     * phone - (String) providing user's phone number
-     * </li>
-     * <li>
-     * picture - (String) providing WWW URL to user's avatar or profile picture
-     * </li>
-     * <li>
-     * picturePath - (String) providing local path to user's avatar or profile picture
-     * </li>
-     * <li>
-     * gender - (String) providing user's gender as M for male and F for female
-     * </li>
-     * <li>
-     * byear - (int) providing user's year of birth as integer
-     * </li>
-     * </ul>
-     * @param data Map&lt;String, String&gt; with user data
-     * @param customdata Map&lt;String, String&gt; with custom key values for this user
-     */
-    public void setUserData(Map<String, String> data, Map<String, String> customdata) {
-        UserData.setData(data);
-        if(customdata != null)
-            UserData.setCustomData(customdata);
-    }
 
-    /**
-     * Sets custom properties.
-     * In custom properties you can provide any string key values to be stored with user
-     * @param customdata Map&lt;String, String&gt; with custom key values for this user
-     */
-    public void setCustomUserData(Map<String, String> customdata) {
-        if(customdata != null)
-            UserData.setCustomData(customdata);
-    }
+	/**
+	 * Sets information about user. Possible keys are:
+	 * <ul>
+	 * <li>
+	 * name - (String) providing user's full name</li>
+	 * <li>
+	 * username - (String) providing user's nickname</li>
+	 * <li>
+	 * email - (String) providing user's email address</li>
+	 * <li>
+	 * organization - (String) providing user's organization's name where user
+	 * works</li>
+	 * <li>
+	 * phone - (String) providing user's phone number</li>
+	 * <li>
+	 * picture - (String) providing WWW URL to user's avatar or profile picture</li>
+	 * <li>
+	 * picturePath - (String) providing local path to user's avatar or profile
+	 * picture</li>
+	 * <li>
+	 * gender - (String) providing user's gender as M for male and F for female</li>
+	 * <li>
+	 * byear - (int) providing user's year of birth as integer</li>
+	 * </ul>
+	 * 
+	 * @param data
+	 *            Map&lt;String, String&gt; with user data
+	 * @deprecated use {@link UserData#setUserData(Map)} to set data and
+	 *             {@link UserData#save()} to send it to server.
+	 */
+	public synchronized void setUserData(Map<String, String> data) {
+		setUserData(data, null);
+	}
 
-    /**
-     * Sets custom provide key/value as custom property.
-     * @param key String with key for the property
-     * @param value String with value for the property
-     */
-    public void setProperty(String key, String value){
-        UserData.setCustomProperty(key, value);
-    }
-    
-    /**
-     * Sets whether debug logging is turned on or off. Logging is disabled by default.
-     * @param enableLogging true to enable logging, false to disable logging
-     * @return Countly instance for easy method chaining
-     */
-    public synchronized void setLoggingEnabled(final boolean enableLogging) {
-        enableLogging_ = enableLogging;
-    }
+	/**
+	 * Sets information about user with custom properties. In custom properties
+	 * you can provide any string key values to be stored with user Possible
+	 * keys are:
+	 * <ul>
+	 * <li>
+	 * name - (String) providing user's full name</li>
+	 * <li>
+	 * username - (String) providing user's nickname</li>
+	 * <li>
+	 * email - (String) providing user's email address</li>
+	 * <li>
+	 * organization - (String) providing user's organization's name where user
+	 * works</li>
+	 * <li>
+	 * phone - (String) providing user's phone number</li>
+	 * <li>
+	 * picture - (String) providing WWW URL to user's avatar or profile picture</li>
+	 * <li>
+	 * picturePath - (String) providing local path to user's avatar or profile
+	 * picture</li>
+	 * <li>
+	 * gender - (String) providing user's gender as M for male and F for female</li>
+	 * <li>
+	 * byear - (int) providing user's year of birth as integer</li>
+	 * </ul>
+	 * 
+	 * @param data
+	 *            Map&lt;String, String&gt; with user data
+	 * @param customdata
+	 *            Map&lt;String, String&gt; with custom key values for this user
+	 */
+	public void setUserData(Map<String, String> data,
+			Map<String, String> customdata) {
+		UserData.setData(data);
+		if (customdata != null)
+			UserData.setCustomData(customdata);
+	}
 
-    public synchronized static boolean isLoggingEnabled() {
-        return enableLogging_;
-    }
-    
-    public synchronized void addCrashLog(String record) {
-        CrashDetails.addLog(record);
-    }
-    
-    /**
-     * Utility method for testing validity of a URL.
-     */
-    public static boolean isValidURL(final String urlStr) {
-        boolean validURL = false;
-        if (urlStr != null && urlStr.length() > 0) {
-            try {
-                new URL(urlStr);
-                validURL = true;
-            }
-            catch (MalformedURLException e) {
-                validURL = false;
-            }
-        }
-        return validURL;
-    }
+	/**
+	 * Sets custom properties. In custom properties you can provide any string
+	 * key values to be stored with user
+	 * 
+	 * @param customdata
+	 *            Map&lt;String, String&gt; with custom key values for this user
+	 */
+	public void setCustomUserData(Map<String, String> customdata) {
+		if (customdata != null)
+			UserData.setCustomData(customdata);
+	}
+
+	/**
+	 * Sets custom provide key/value as custom property.
+	 * 
+	 * @param key
+	 *            String with key for the property
+	 * @param value
+	 *            String with value for the property
+	 */
+	public void setProperty(String key, String value) {
+		UserData.setCustomProperty(key, value);
+	}
+
+	/**
+	 * Sets whether debug logging is turned on or off. Logging is disabled by
+	 * default.
+	 * 
+	 * @param enableLogging
+	 *            true to enable logging, false to disable logging
+	 * @return lingcloud instance for easy method chaining
+	 */
+	public synchronized void setLoggingEnabled(final boolean enableLogging) {
+		enableLogging_ = enableLogging;
+	}
+
+	public synchronized static boolean isLoggingEnabled() {
+		return enableLogging_;
+	}
+
+	public synchronized void addCrashLog(String record) {
+		CrashDetails.addLog(record);
+	}
+
+	/**
+	 * Utility method for testing validity of a URL.
+	 */
+	public static boolean isValidURL(final String urlStr) {
+		boolean validURL = false;
+		if (urlStr != null && urlStr.length() > 0) {
+			try {
+				new URL(urlStr);
+				validURL = true;
+			} catch (MalformedURLException e) {
+				validURL = false;
+			}
+		}
+		return validURL;
+	}
 }
