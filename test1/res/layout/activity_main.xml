@@ -72,6 +72,26 @@
         android:height="30px"
         android:visibility="visible"
         android:text="提交hook了的网络参数" />
+        
+        <Button
+        android:id="@+id/Button07"
+        android:layout_below="@id/Button06"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:height="30px"
+        android:visibility="visible"
+        android:text="手动产生crash给48服务器" />
    
+        <Button
+        android:id="@+id/Button08"
+        android:layout_below="@id/Button07"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:height="30px"
+        android:visibility="visible"
+        android:text="手动产生用户信息命令" />
+        
 
 </RelativeLayout>
